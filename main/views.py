@@ -7,6 +7,7 @@ from django.views.generic import(
 )
 from main import models, forms
 from django.views.generic.detail import BaseDetailView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class Index(ListView):
     model=models.Question
@@ -14,10 +15,11 @@ class Index(ListView):
     context_object_name='question_list'  #this is defined by default just doing it for further understanding
 
 
-class Question(BaseDetailView, FormView):
+class Question(PermissionRequiredMixin, BaseDetailView, FormView):
     model=models.Question
     template_name='main/questions.html'
     form_class=forms.AnswerForm
+    permission_required='add_answer'
 
 
     def get_context_data(self,*args, **kwargs):
